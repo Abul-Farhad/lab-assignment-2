@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    function changeBorderColor() {
+      const colors = [
+        "lightblue",
+        "yellow",
+        "lightgreen",
+        "purple"
+      ];
+
+      let backgroundColorId, backgroundTextId, borderColorId;
+
+      while (true) {
+        backgroundColorId = Math.floor(Math.random() * colors.length);
+        backgroundTextId = Math.floor(Math.random() * colors.length);
+        borderColorId = Math.floor(Math.random() * colors.length);
+
+        if (backgroundColorId != backgroundTextId && backgroundColorId != borderColorId && backgroundTextId != borderColorId) {
+          break;
+        }
+      }
+
+      const divElement = document.getElementById("random-text-field");
+      divElement.style.borderColor = colors[borderColorId];
+      divElement.style.background = colors[backgroundColorId];
+      divElement.style.color = colors[backgroundTextId];
+
+    }
+
+
+    function generateRandomText() {
+      const divElement = document.getElementById("random-text-field");
+      divElement.innerHTML = '';
+      const quoteArray = [
+        "Bankai, Katen Kyokotsu Karamatsu Shinju",
+        "Every man is a boy in heart",
+        "I will become the King of Pirates",
+        "Hate Assignments :3"
+      ];
+      let id = Math.floor(Math.random() * quoteArray.length);
+      const newElemenet = document.createElement('p');
+      newElemenet.textContent = quoteArray[id];
+      divElement.appendChild(newElemenet);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      console.log("DOM fully loaded and parsed");
+      generateRandomText();
+      document.getElementById("numbers").addEventListener("input", updateTable);
+
+    });
+
+
+    function convert(event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const inputNumber = parseFloat(form["number"].value);
+      const selectedUnit = form["convert-unit"].value;
+
+
+      let result, unit;
+      if (selectedUnit === 'lb-kg') {
+        result = inputNumber * 0.453592;
+        unit = "kilograms.";
+      } else if (selectedUnit === 'kg-lb') {
+        result = inputNumber * 2.20462;
+        unit = "pounds."
+      }
+
+
+      document.getElementById('resultField').textContent = `${result.toFixed(4)} ${unit}`;
+    }
+
+    function findSum(arr) {
+      let res = 0;
+      for (let i = 0; i < arr.length; i++) {
+        res += arr[i];
+      }
+      return res;
+    }
+
+    function updateTable() {
+      const inputField = document.getElementById("numbers");
+      const inputValue = inputField.value.trim();
+
+
+      const numbers = inputValue
+        .split(',')
+        .map(num => parseFloat(num))
+        .filter(num => !isNaN(num));
+
+      if (numbers.length > 0) {
+        let totalSum = findSum(numbers);
+        let average = totalSum / numbers.length;
+        document.getElementById("max").textContent = Math.max(...numbers);
+        document.getElementById("min").textContent = Math.min(...numbers);
+        document.getElementById("sum").textContent = totalSum;
+        document.getElementById("avg").textContent = average.toFixed(4);
+        document.getElementById("reverse").textContent = numbers.reverse().join(", ");
+      } else {
+
+        document.getElementById("max").textContent = "00";
+        document.getElementById("min").textContent = "00";
+        document.getElementById("sum").textContent = "00";
+        document.getElementById("avg").textContent = "00";
+        document.getElementById("reverse").textContent = "00";
+      }
+    }
+
+    // Task - 3
+    function clearText() {
+      const textarea = document.getElementById("textarea");
+      textarea.value = "";
+    }
+
+    function capitalizeText() {
+      const textarea = document.getElementById('textarea');
+      const lines = textarea.value.split('\n');
+      const capitalizedLines = lines.map(line => line.toUpperCase());
+      textarea.value = capitalizedLines.join('\n');
+    }
+
+    function sortText() {
+      const textarea = document.getElementById('textarea');
+      const lines = textarea.value.split('\n');
+      const sortedLines = lines.sort();
+      textarea.value = sortedLines.join('\n');
+    }
+
+    function reverseText() {
+      const textarea = document.getElementById('textarea');
+      const lines = textarea.value.split('\n');
+      const reversedLines = lines.reverse();
+      textarea.value = reversedLines.join('\n');
+    }
+
+    function stripBlank() {
+      const textarea = document.getElementById('textarea');
+      const lines = textarea.value.split('\n');
+      const strippedLines = lines
+        .map(line => line.trim()) 
+        .filter(line => line.length > 0);
+      textarea.value = strippedLines.join('\n');
+    }
+
+    function addNumbers() {
+      const textarea = document.getElementById('textarea');
+      const lines = textarea.value.split('\n');
+      const numberedLines = lines
+        .map((line, id) => `${id + 1}. ${line}`); 
+      textarea.value = numberedLines.join('\n');
+    }
+
+    function shuffleLines() {
+      const textarea = document.getElementById('textarea');
+      const lines = textarea.value.split('\n');
+      const shuffledLines = lines.sort(() => Math.random()-0.5);
+      textarea.value = shuffledLines.join('\n');
+    }
+
+
+
+
+  </script>
+
+</head>
+
+<body>
+  <!-- Task 1 -->
+  <section class="random-quota">
+    <div class="random-text-field" id="random-text-field">
+      <p>Random text will appear here...</p>
+    </div>
+    <div class="colorful-btns">
+      <div class="btn-row-1">
+        <div class="btn-1" onclick="changeBorderColor()">
+          <p>button 1</p>
+        </div>
+        <div class="btn-2" onclick="changeBorderColor()">
+          <p>button 2</p>
+        </div>
+      </div>
+
+      <div class="btn-row-2">
+        <div class="btn-3" onclick="changeBorderColor()">
+          <p>button 3</p>
+        </div>
+        <div class="btn-4" onclick="changeBorderColor()">
+          <p> button 4 </p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- Task 2 -->
+  <section class="hero-converter">
+    <form class="hero-converter-form" id="hero-converter-form" onsubmit="convert(event)">
+      <label for="number">Convert </label>
+      <input type="number" id="number" name="number" required>
+
+      <select name="convert-unit" id="convert-unit">
+        <option value="lb-kg">lb to kg</option>
+        <option value="kg-lb">kg to lb</option>
+      </select>
+
+      <button type="submit">Go</button>
+    </form>
+
+    <div class="result" id="resultField"></div>
+  </section>
+
+  <!-- Task 3 -->
+  <section>
+
+    <table>
+      <tr>
+        <td class="left-col-element">
+          <h3>Input Series of Number</h3>
+        </td>
+        <td class="right-col-element">
+          <input type="text" name="numbers" id="numbers" class="input-field">
+        </td>
+      </tr>
+
+      <tr>
+        <td class="left-col-element">
+          <h3>Max:</h3>
+        </td>
+        <td class="right-col-element" id="max">
+          00
+        </td>
+      </tr>
+
+      <tr>
+        <td class="left-col-element">
+          <h3>Min:</h3>
+        </td>
+        <td class="right-col-element" id="min">
+          00
+        </td>
+      </tr>
+
+      <tr>
+        <td class="left-col-element">
+          <h3>Sum:</h3>
+        </td>
+        <td class="right-col-element" id="sum">
+          00
+        </td>
+      </tr>
+
+      <tr>
+        <td class="left-col-element">
+          <h3>Average:</h3>
+        </td>
+        <td class="right-col-element" id="avg">
+          00
+        </td>
+      </tr>
+
+      <tr>
+        <td class="left-col-element">
+          <h3>Reverse Order:</h3>
+        </td>
+        <td class="right-col-element" id="reverse">
+          00
+        </td>
+      </tr>
+    </table>
+
+
+
+  </section>
+  <!-- Task 4 -->
+  <section class="magic">
+    <h1 class="header-text">Magic!</h1>
+    <textarea class="text-area" id="textarea" placeholder="Start typing...">
+    </textarea>
+    <div class="buttons">
+      <button class="btn" onclick="clearText()">Clear It</button>
+      <button class="btn" onclick="capitalizeText()">Capitalize</button>
+      <button class="btn" onclick="sortText()">Sort</button>
+      <button class="btn" onclick="reverseText()">Reverse</button>
+      <button class="btn" onclick="stripBlank()">Strip Blank</button>
+      <button class="btn" onclick="addNumbers()">Add Numbers</button>
+      <button class="btn" onclick="shuffleLines()">Shuffles</button>
+    </div>
+  </section>
+
+</body>
+
+</html>
